@@ -144,10 +144,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         {
             //showing the ad Interstitial Ad if it is loaded
             interstitialAd.show() ;
-
-            // Showing a simple Toast message to user when an Interstitial ad is shown to the user
-     //       Toast.makeText (MainActivity.this, "Interstitial is loaded and showing ad  ", Toast.LENGTH_LONG) .show();
-        }
+  }
         else
         {
             //Load the Interstitial ad if it is not loaded
