@@ -34,6 +34,8 @@ public class ProductScreen extends AppCompatActivity {
     private DBHandler dbHandler;
     private List<Product> productArrayList;
     private ProductListAdapters adapters;
+    private SharedPreferencesManager manager;
+    private String version = "Free Version";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,8 @@ public class ProductScreen extends AppCompatActivity {
         binding = ActivityProductScreenBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         dbHandler = new DBHandler(ProductScreen.this);
+        manager = new SharedPreferencesManager(ProductScreen.this);
+        version = manager.retrieveString("billing","Free Version");
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
@@ -48,9 +52,14 @@ public class ProductScreen extends AppCompatActivity {
             }
         });
 
+
         AdView mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        if (version.equals("Free Version")) {
+            AdRequest adRequest = new AdRequest.Builder().build();
+            mAdView.loadAd(adRequest);
+        }else{
+            mAdView.setVisibility(View.GONE);
+        }
 
         binding.arrow.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">FoodHubApp</string>
+    <string name="app_name">FoodHub</string>
 
     <string name="signup_welcome_txt">Create a new account</string>
     <string name="signup_welcome_content">Become a member, to get together</string>

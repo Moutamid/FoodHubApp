@@ -2,6 +2,7 @@ package com.moutamid.foodhubapp;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -12,7 +13,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
@@ -27,7 +30,7 @@ import com.moutamid.foodhubapp.databinding.ActivityMainBinding;
 import com.moutamid.foodhubapp.model.User;
 import com.moutamid.foodhubapp.utils.Constants;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler{
 
     private ActivityMainBinding binding;
     private DBHandler dbHandler;
@@ -37,6 +40,9 @@ public class MainActivity extends AppCompatActivity{
     private String version = "Free Version";
     private InterstitialAd interstitialAd;
 
+    BillingProcessor bp;
+    public static final String LICENSE_KEY = "";
+    public static final String ONE_TIME_PRODUCT = "one.time.com.moutamid.foodhub";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +54,9 @@ public class MainActivity extends AppCompatActivity{
         manager = new SharedPreferencesManager(MainActivity.this);
         version = manager.retrieveString("billing","Free Version");
         email = manager.retrieveString("email","");
+        bp = BillingProcessor.newBillingProcessor(this, LICENSE_KEY, this);
+        bp.initialize();
+
         checkPermission();
         Constants.checkApp(MainActivity.this);
         interstitialAd = new InterstitialAd (MainActivity.this) ;
@@ -59,12 +68,16 @@ public class MainActivity extends AppCompatActivity{
         });
         //setting Ad Unit Id to the interstitialAd
         interstitialAd.setAdUnitId ( "ca-app-pub-3940256099942544/1033173712" ) ;
-        loadInterstitialAd();
-        AdView mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
-        showInterstitialAd();
 
+        AdView mAdView = findViewById(R.id.adView);
+        if (version.equals("Free Version")) {
+            AdRequest adRequest = new AdRequest.Builder().build();
+            mAdView.loadAd(adRequest);
+            loadInterstitialAd();
+            showInterstitialAd();
+        }else{
+            mAdView.setVisibility(View.GONE);
+        }
         binding.product.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,10 +95,35 @@ public class MainActivity extends AppCompatActivity{
         binding.recipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,PersonalRecipes.class));
-                finish();
+                if (version.equals("Free Version")){
+                    buyDialog();
+                }else {
+                    startActivity(new Intent(MainActivity.this,PersonalRecipes.class));
+                    finish();
+                }
             }
         });
+
+    }
+
+
+
+    private void buyDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.buy_dialog, null);
+        dialogBuilder.setView(dialogView);
+        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button addBtn = (Button) dialogView.findViewById(R.id.buy);
+        AlertDialog alertDialog = dialogBuilder.create();
+        addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                manager.storeString("billing","Paid Version");
+                //    bp.subscribe(PersonalRecipes.this,ONE_TIME_PRODUCT);
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.show();
 
     }
 
@@ -162,5 +200,32 @@ public class MainActivity extends AppCompatActivity{
         binding.email.setText(user.getEmail());
         binding.paid.setText(version);
     }
+    @Override
+    public void onProductPurchased(@NonNull String productId, @Nullable PurchaseInfo details) {
+        manager.storeString("billing","Paid Version");
+    }
 
+    @Override
+    public void onPurchaseHistoryRestored() {
+
+    }
+
+    @Override
+    public void onBillingError(int errorCode, @Nullable Throwable error) {
+
+        Toast.makeText(MainActivity.this, "onBillingError: code: " + ""+ errorCode , Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBillingInitialized() {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (bp != null) {
+            bp.release();
+        }
+        super.onDestroy();
+    }
 }

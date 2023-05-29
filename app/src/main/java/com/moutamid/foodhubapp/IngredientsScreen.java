@@ -23,6 +23,8 @@ public class IngredientsScreen extends AppCompatActivity {
 
     private ActivityIngredientsScreenBinding binding;
     private ArrayList<Ingredients> ingredientsArrayList;
+    private SharedPreferencesManager manager;
+    private String version = "Free Version";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +45,15 @@ public class IngredientsScreen extends AppCompatActivity {
             }
         });
 
+        manager = new SharedPreferencesManager(IngredientsScreen.this);
+        version = manager.retrieveString("billing","Free Version");
         AdView mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
-
+        if (version.equals("Free Version")) {
+            AdRequest adRequest = new AdRequest.Builder().build();
+            mAdView.loadAd(adRequest);
+        }else{
+            mAdView.setVisibility(View.GONE);
+        }
         ingredientsArrayList = new ArrayList<>();
         loadData();
     }

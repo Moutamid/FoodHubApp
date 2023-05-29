@@ -48,7 +48,7 @@ import java.nio.ByteBuffer;
 import java.util.Calendar;
 import java.util.List;
 
-public class PersonalRecipes extends AppCompatActivity implements BillingProcessor.IBillingHandler {
+public class PersonalRecipes extends AppCompatActivity {
 
     private ActivityPersonalRecipesBinding binding;
     private DBHandler dbHandler;
@@ -60,9 +60,6 @@ public class PersonalRecipes extends AppCompatActivity implements BillingProcess
     private RecipeListAdapters adapters;
     List<Recipe> recipeList;
     private SharedPreferencesManager manager;
-    BillingProcessor bp;
-    public static final String LICENSE_KEY = "";
-    public static final String ONE_TIME_PRODUCT = "one.time.com.moutamid.foodhub";
     private String version = "Free Version";
 
     @Override
@@ -73,8 +70,6 @@ public class PersonalRecipes extends AppCompatActivity implements BillingProcess
         dbHandler = new DBHandler(PersonalRecipes.this);
         manager = new SharedPreferencesManager(PersonalRecipes.this);
         version = manager.retrieveString("billing","Free Version");
-        bp = BillingProcessor.newBillingProcessor(this, LICENSE_KEY, this);
-        bp.initialize();
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
@@ -83,11 +78,13 @@ public class PersonalRecipes extends AppCompatActivity implements BillingProcess
         if(!BillingProcessor.isIabServiceAvailable(this)) {
             Toast.makeText(this, "In-app billing service is unavailable, please upgrade Android Market/Play to version >= 3.9.16", Toast.LENGTH_SHORT).show();
         }
-
         AdView mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
-
+        if (version.equals("Free Version")) {
+            AdRequest adRequest = new AdRequest.Builder().build();
+            mAdView.loadAd(adRequest);
+        }else{
+            mAdView.setVisibility(View.GONE);
+        }
         binding.arrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,34 +96,11 @@ public class PersonalRecipes extends AppCompatActivity implements BillingProcess
         binding.addNEw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (version.equals("Free Version")){
-                //    bp.subscribe(PersonalRecipes.this,ONE_TIME_PRODUCT);
-                    buyDialog();
-                }else {
-                    showAddNewProductDialog();
-                }
+                showAddNewProductDialog();
             }
         });
 
         getRecipesList();
-    }
-
-    private void buyDialog() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(PersonalRecipes.this);
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.buy_dialog, null);
-        dialogBuilder.setView(dialogView);
-        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button addBtn = (Button) dialogView.findViewById(R.id.buy);
-        AlertDialog alertDialog = dialogBuilder.create();
-        addBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                manager.storeString("billing","Paid Version");
-                alertDialog.dismiss();
-            }
-        });
-        alertDialog.show();
-
     }
 
     String recipe = "";
@@ -228,32 +202,5 @@ public class PersonalRecipes extends AppCompatActivity implements BillingProcess
         }
     }
 
-    @Override
-    public void onProductPurchased(@NonNull String productId, @Nullable PurchaseInfo details) {
-        manager.storeString("billing","Paid Version");
-    }
 
-    @Override
-    public void onPurchaseHistoryRestored() {
-
-    }
-
-    @Override
-    public void onBillingError(int errorCode, @Nullable Throwable error) {
-
-        Toast.makeText(PersonalRecipes.this, "onBillingError: code: " + ""+ errorCode , Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onBillingInitialized() {
-
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (bp != null) {
-            bp.release();
-        }
-        super.onDestroy();
-    }
 }

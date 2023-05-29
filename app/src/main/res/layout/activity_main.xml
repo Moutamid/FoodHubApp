@@ -58,7 +58,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -134,6 +135,8 @@
                 android:id="@+id/product"
                 app:cardBackgroundColor="#ffffff"
                 android:layout_marginTop="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 app:cardCornerRadius="10dp">
 
                 <LinearLayout
@@ -168,8 +171,10 @@
                 android:layout_height="50dp"
                 android:id="@+id/ingredient"
                 app:cardBackgroundColor="#ffffff"
-                android:layout_marginTop="10dp"
-                app:cardCornerRadius="10dp">
+                android:layout_marginTop="15dp"
+                app:cardCornerRadius="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -202,8 +207,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 app:cardBackgroundColor="#ffffff"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:id="@+id/recipe"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="20dp"
                 app:cardCornerRadius="10dp">
 
                 <LinearLayout
