@@ -129,6 +129,20 @@
                     android:textColor="@color/black"/>
             </LinearLayout>
 
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/logout"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:layout_below="@id/mail_pass_layout"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:background="@drawable/logout_shapable_recatngle"
+                android:elevation="10dp"
+                android:text="Logout"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="50dp"

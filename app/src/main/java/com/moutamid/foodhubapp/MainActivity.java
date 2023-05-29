@@ -92,6 +92,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 finish();
             }
         });
+        binding.logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                manager.storeString("email","");
+                startActivity(new Intent(MainActivity.this,LoginActivity.class));
+                finish();
+            }
+        });
         binding.recipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,6 +127,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             @Override
             public void onClick(View view) {
                 manager.storeString("billing","Paid Version");
+                startActivity(new Intent(MainActivity.this,PersonalRecipes.class));
+                finish();
                 //    bp.subscribe(PersonalRecipes.this,ONE_TIME_PRODUCT);
                 alertDialog.dismiss();
             }

@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:text="Add New Recetti"
+            android:text="Add New Ricette"
             android:gravity="center"
             android:textStyle="bold"
             android:textSize="18sp"/>
@@ -23,8 +23,9 @@
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/app_logo"
+            android:src="@drawable/ic_baseline_add_a_photo_24"
             android:id="@+id/imageView"
+            android:padding="10dp"
             android:layout_marginTop="20dp"
             android:layout_gravity="center"/>
 
@@ -40,7 +41,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter Recetti nome here!"
+            android:hint="Enter Ricette nome here!"
             android:inputType="text"
             android:textColor="@color/black"
             android:id="@+id/recipeName"
@@ -60,7 +61,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:hint="Enter Recetti description here!"
+            android:hint="Enter Ricette description here!"
             android:inputType="textMultiLine"
             android:textColor="@color/black"
             android:id="@+id/description"
@@ -79,7 +80,7 @@
             android:layout_weight="1"
             android:background="@drawable/shapable_recatngle"
             android:elevation="10dp"
-            android:text="Add Recetti"
+            android:text="Add Ricette"
             android:textColor="@color/white"
             android:textSize="14sp"
             android:textStyle="bold" />
