@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="20dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="Add New Recetti"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/app_logo"
+            android:id="@+id/imageView"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"/>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:text="Recetti Nome"
+            android:textSize="14sp"
+            android:layout_marginTop="10dp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Recetti nome here!"
+            android:inputType="text"
+            android:textColor="@color/black"
+            android:id="@+id/recipeName"
+            android:layout_marginTop="8dp"
+            android:textColorHint="#808080"
+            android:textSize="14sp" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:text="Description"
+            android:textSize="14sp"
+            android:layout_marginTop="10dp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:hint="Enter Recetti description here!"
+            android:inputType="textMultiLine"
+            android:textColor="@color/black"
+            android:id="@+id/description"
+            android:layout_marginTop="8dp"
+            android:gravity="start"
+            android:textColorHint="#808080"
+            android:textSize="14sp" />
+
+
+        <Button
+            android:id="@+id/update"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_below="@id/mail_pass_layout"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/shapable_recatngle"
+            android:elevation="10dp"
+            android:text="Add Recetti"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

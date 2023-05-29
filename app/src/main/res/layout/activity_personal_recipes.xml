@@ -49,6 +49,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_margin="20dp">
 
+
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/admob_banner_id">
+        </com.google.android.gms.ads.AdView>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -56,6 +66,7 @@
             android:textColor="@color/purple_500"
             android:drawablePadding="8dp"
             android:gravity="center"
+            android:layout_below="@+id/adView"
             android:id="@+id/addNEw"
             android:drawableLeft="@drawable/ic_baseline_post_add_24"
             android:layout_alignParentRight="true"/>

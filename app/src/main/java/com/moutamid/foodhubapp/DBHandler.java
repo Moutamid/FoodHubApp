@@ -6,10 +6,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import com.moutamid.foodhubapp.model.Product;
+import com.moutamid.foodhubapp.model.Recipe;
 import com.moutamid.foodhubapp.model.User;
+import com.moutamid.foodhubapp.utils.DbBitmapUtil;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +42,13 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String COLUMN_PRDUCT_NAME = "product_name";
     private static final String COLUMN_PRODUCT_EXPIRY = "product_expiry";
 
+    private static final String TABLE_RECIPE = "recipe";
+    // User Table Columns names
+    private static final String COLUMN_RECIPE_ID = "recipe_id";
+    private static final String COLUMN_RECIPE_NAME = "recipe_name";
+    private static final String COLUMN_RECIPE_DESP = "recipe_desp";
+    private static final String COLUMN_RECIPE_IMAGE = "recipe_image";
+
     // create table sql query
     private String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER + "("
             + COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_USER_NAME + " TEXT,"
@@ -45,11 +57,20 @@ public class DBHandler extends SQLiteOpenHelper {
     private String DROP_USER_TABLE = "DROP TABLE IF EXISTS " + TABLE_USER;
 
 
+
     private String CREATE_PRODUCT_TABLE = "CREATE TABLE " + TABLE_PRODUCT + "("
             + COLUMN_PRODUCT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_PRDUCT_NAME + " TEXT,"
             + COLUMN_PRODUCT_EXPIRY + " TEXT" + ")";
     // drop table sql query
     private String DROP_PRODUCT_TABLE = "DROP TABLE IF EXISTS " + TABLE_PRODUCT;
+
+    // create table sql query
+    private String CREATE_RECIPE_TABLE = "CREATE TABLE " + TABLE_RECIPE + "("
+            + COLUMN_RECIPE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_RECIPE_NAME + " TEXT,"
+            + COLUMN_RECIPE_DESP + " TEXT," +  COLUMN_RECIPE_IMAGE + " TEXT" + ")";
+    // drop table sql query
+    private String DROP_RECIPE_TABLE = "DROP TABLE IF EXISTS " + TABLE_RECIPE;
+
 
     // creating a constructor for our database handler.
     public DBHandler(Context context) {
@@ -61,12 +82,14 @@ public class DBHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_USER_TABLE);
         db.execSQL(CREATE_PRODUCT_TABLE);
+        db.execSQL(CREATE_RECIPE_TABLE);
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //Drop User Table if exist
         db.execSQL(DROP_USER_TABLE);
         db.execSQL(DROP_PRODUCT_TABLE);
+        db.execSQL(DROP_RECIPE_TABLE);
         // Create tables again
         onCreate(db);
     }
@@ -96,6 +119,22 @@ public class DBHandler extends SQLiteOpenHelper {
         db.insert(TABLE_PRODUCT, null, values);
         db.close();
     }
+
+    public void addRecipe(Recipe recipe) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Bitmap bitmap = recipe.getImage();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+        byte[] image = bos.toByteArray();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_RECIPE_NAME, recipe.getName());
+        values.put(COLUMN_RECIPE_DESP, recipe.getDescription());
+        values.put(COLUMN_RECIPE_IMAGE, image);
+        // Inserting Row
+        db.insert(TABLE_RECIPE, null, values);
+        db.close();
+    }
+
 
     @SuppressLint("Range")
     public List<Product> getAllProducts() {
@@ -139,6 +178,57 @@ public class DBHandler extends SQLiteOpenHelper {
         // return user list
         return userList;
     }
+
+    @SuppressLint("Range")
+    public List<Recipe> getAllRecipes() {
+        // array of columns to fetch
+        String[] columns = {
+                COLUMN_RECIPE_ID,
+                COLUMN_RECIPE_NAME,
+                COLUMN_RECIPE_DESP,
+                COLUMN_RECIPE_IMAGE
+        };
+        // sorting orders
+        String sortOrder =
+                COLUMN_RECIPE_NAME + " ASC";
+        List<Recipe> userList = new ArrayList<Recipe>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        // query the user table
+        /**
+         * Here query function is used to fetch records from user table this function works like we use sql query.
+         * SQL query equivalent to this query function is
+         * SELECT user_id,user_name,user_email,user_password FROM user ORDER BY user_name;
+         */
+        Cursor cursor = db.query(TABLE_RECIPE, //Table to query
+                columns,    //columns to return
+                null,        //columns for the WHERE clause
+                null,        //The values for the WHERE clause
+                null,       //group the rows
+                null,       //filter by row groups
+                sortOrder); //The sort order
+        // Traversing through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+              //  Recipe recipe = new Recipe();
+                //recipe.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(COLUMN_RECIPE_ID))));
+                //recipe.setName(cursor.getString(cursor.getColumnIndex(COLUMN_RECIPE_NAME)));
+                //recipe.setDescription(cursor.getString(cursor.getColumnIndex(COLUMN_RECIPE_DESP)));
+                int id = Integer.parseInt(cursor.getString(0));
+                String name = cursor.getString(1);
+                String desp = cursor.getString(2);
+                byte[] imageByte = cursor.getBlob(3);
+                Bitmap objectBitmap = BitmapFactory.decodeByteArray(imageByte,0,imageByte.length);
+                Recipe recipe = new Recipe(name,desp,objectBitmap);
+                // Adding user record to list
+                userList.add(recipe);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        // return user list
+        return userList;
+    }
+
 
     /**
      * This method is to fetch all user and return the list of user records

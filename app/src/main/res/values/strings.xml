@@ -6,6 +6,10 @@
     <string name="login_welcome_txt">Welcome Back</string>
     <string name="login_welcome_desp">Enter your credentials to continue</string>
 
+
+    <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="admob_banner_id">ca-app-pub-3940256099942544/6300978111</string>
+
     <string name="ingredient1">Spaghetti</string>
     <string name="ingredient2">Pecorino Romano</string>
     <string name="ingredient3">Pepe nero in grani</string>

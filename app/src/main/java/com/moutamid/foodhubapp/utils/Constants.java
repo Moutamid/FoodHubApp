@@ -1,6 +1,5 @@
 package com.moutamid.foodhubapp.utils;
 
-
 import android.app.Activity;
 import android.os.Build;
 
@@ -15,12 +14,10 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-
 public class Constants {
 
-
     public static void checkApp(Activity activity) {
-        String appName = "food_hub";
+        String appName = "foodHub"; //TODO: CHANGE APP NAME
 
         new Thread(() -> {
             URL google = null;

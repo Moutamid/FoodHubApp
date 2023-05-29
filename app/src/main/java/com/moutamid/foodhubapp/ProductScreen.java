@@ -13,7 +13,13 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.moutamid.foodhubapp.adapters.ProductListAdapters;
 import com.moutamid.foodhubapp.databinding.ActivityProductScreenBinding;
 import com.moutamid.foodhubapp.model.Product;
@@ -35,6 +41,16 @@ public class ProductScreen extends AppCompatActivity {
         binding = ActivityProductScreenBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         dbHandler = new DBHandler(ProductScreen.this);
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+
+            }
+        });
+
+        AdView mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         binding.arrow.setOnClickListener(new View.OnClickListener() {
             @Override

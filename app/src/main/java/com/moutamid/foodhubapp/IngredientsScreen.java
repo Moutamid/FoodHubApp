@@ -6,7 +6,13 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.moutamid.foodhubapp.adapters.IngredientListAdapters;
 import com.moutamid.foodhubapp.databinding.ActivityIngredientsScreenBinding;
 import com.moutamid.foodhubapp.model.Ingredients;
@@ -31,6 +37,16 @@ public class IngredientsScreen extends AppCompatActivity {
                 finish();
             }
         });
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+
+        AdView mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
         ingredientsArrayList = new ArrayList<>();
         loadData();
     }
