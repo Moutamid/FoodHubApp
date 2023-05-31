@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_margin="8dp">
 
@@ -14,24 +15,28 @@
         android:gravity="center"
         android:background="@drawable/divider">
 
-        <TextView
+        <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:id="@+id/ingredient"
-            android:textColor="@color/black"/>
+            app:cardCornerRadius="10dp">
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:id="@+id/imageView"
+                android:scaleType="centerCrop"
+                android:src="@drawable/app_logo"/>
+
+        </androidx.cardview.widget.CardView>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:id="@+id/quantity"
+            android:id="@+id/productName"
+            android:layout_marginLeft="10dp"
             android:textColor="@color/black"/>
+
 
     </LinearLayout>
 </LinearLayout>

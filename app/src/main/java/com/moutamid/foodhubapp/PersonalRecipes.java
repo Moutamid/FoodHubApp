@@ -37,7 +37,6 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 import com.moutamid.foodhubapp.adapters.ProductListAdapters;
 import com.moutamid.foodhubapp.adapters.RecipeListAdapters;
 import com.moutamid.foodhubapp.databinding.ActivityPersonalRecipesBinding;
-import com.moutamid.foodhubapp.databinding.ActivityRecipeWebScreenBinding;
 import com.moutamid.foodhubapp.model.Product;
 import com.moutamid.foodhubapp.model.Recipe;
 import com.moutamid.foodhubapp.utils.DbBitmapUtil;

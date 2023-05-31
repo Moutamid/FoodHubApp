@@ -92,14 +92,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 finish();
             }
         });
-        binding.logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                manager.storeString("email","");
-                startActivity(new Intent(MainActivity.this,LoginActivity.class));
-                finish();
-            }
-        });
         binding.recipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,6 +101,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     startActivity(new Intent(MainActivity.this,PersonalRecipes.class));
                     finish();
                 }
+            }
+        });
+
+        binding.profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,ProfileImformation.class));
+                finish();
             }
         });
 
@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     Manifest.permission.READ_EXTERNAL_STORAGE }, STORAGE_PERMISSION_CODE);
         }
         else {
-            getUserDetails();
+
             //  Toast.makeText(EditProfileScreen.this, "Permission already granted", Toast.LENGTH_SHORT).show();
         }
     }
@@ -190,7 +190,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         if (requestCode == STORAGE_PERMISSION_CODE) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getUserDetails();
                 //Toast.makeText(EditProfileScreen.this, "Storage Permission Granted", Toast.LENGTH_SHORT).show();
             }
             else {
@@ -199,14 +198,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
     }
 
-    @SuppressLint("Range")
-    private void getUserDetails() {
-        User user = dbHandler.getUser(email);
-        binding.name.setText(user.getName());
-        binding.surName.setText(user.getSurname());
-        binding.email.setText(user.getEmail());
-        binding.paid.setText(version);
-    }
     @Override
     public void onProductPurchased(@NonNull String productId, @Nullable PurchaseInfo details) {
         manager.storeString("billing","Paid Version");

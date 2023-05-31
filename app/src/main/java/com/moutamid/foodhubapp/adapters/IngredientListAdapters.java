@@ -2,17 +2,17 @@ package com.moutamid.foodhubapp.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.moutamid.foodhubapp.ProductRecipeDescription;
 import com.moutamid.foodhubapp.R;
-import com.moutamid.foodhubapp.RecipeWebScreen;
 import com.moutamid.foodhubapp.model.Ingredients;
 import com.moutamid.foodhubapp.model.Product;
 
@@ -37,25 +37,16 @@ public class IngredientListAdapters extends RecyclerView.Adapter<IngredientListA
 
     @Override
     public void onBindViewHolder(@NonNull ProductListView holder, int position) {
-        Ingredients ingredients = productList.get(position);
-        holder.ingTxt.setText(ingredients.getName());
-        if (ingredients.getQuantity() == 0){
-            holder.quantityTxt.setVisibility(View.GONE);
-        }else {
-            holder.quantityTxt.setVisibility(View.VISIBLE);
-            holder.quantityTxt.setText(String.valueOf(ingredients.getQuantity()));
-        }
+        Ingredients product = productList.get(position);
+        holder.prductTxt.setText(product.getName());
+        holder.imageView.setImageResource(product.getImage());
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri webpage = Uri.parse(ingredients.getLink());
-                Intent webIntent = new Intent(Intent.ACTION_VIEW, webpage);
-                try {
-                    mContext.startActivity(webIntent);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
+                Intent intent = new Intent(mContext, ProductRecipeDescription.class);
+                intent.putExtra("model",product);
+                mContext.startActivity(intent);
             }
         });
     }
@@ -67,12 +58,14 @@ public class IngredientListAdapters extends RecyclerView.Adapter<IngredientListA
 
     public class ProductListView extends RecyclerView.ViewHolder{
 
-        public TextView ingTxt,quantityTxt;
+        public TextView prductTxt;
+        private ImageView imageView;
 
         public ProductListView(@NonNull View itemView) {
             super(itemView);
-            ingTxt = itemView.findViewById(R.id.ingredient);
-            quantityTxt = itemView.findViewById(R.id.quantity);
+            imageView = itemView.findViewById(R.id.imageView);
+            prductTxt = itemView.findViewById(R.id.productName);
+
         }
     }
 }

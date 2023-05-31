@@ -40,6 +40,7 @@ public class DBHandler extends SQLiteOpenHelper {
     // User Table Columns names
     private static final String COLUMN_PRODUCT_ID = "product_id";
     private static final String COLUMN_PRDUCT_NAME = "product_name";
+    private static final String COLUMN_PRDUCT_IMAGE = "product_image";
     private static final String COLUMN_PRODUCT_EXPIRY = "product_expiry";
 
     private static final String TABLE_RECIPE = "recipe";
@@ -60,7 +61,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     private String CREATE_PRODUCT_TABLE = "CREATE TABLE " + TABLE_PRODUCT + "("
             + COLUMN_PRODUCT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_PRDUCT_NAME + " TEXT,"
-            + COLUMN_PRODUCT_EXPIRY + " TEXT" + ")";
+            + COLUMN_PRDUCT_IMAGE + " BLOB," + COLUMN_PRODUCT_EXPIRY + " TEXT" + ")";
     // drop table sql query
     private String DROP_PRODUCT_TABLE = "DROP TABLE IF EXISTS " + TABLE_PRODUCT;
 
@@ -114,6 +115,7 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_PRDUCT_NAME, product.getProductName());
+        values.put(COLUMN_PRDUCT_IMAGE, product.getImgByte());
         values.put(COLUMN_PRODUCT_EXPIRY, product.getExpiryDate());
         // Inserting Row
         db.insert(TABLE_PRODUCT, null, values);
@@ -142,6 +144,7 @@ public class DBHandler extends SQLiteOpenHelper {
         String[] columns = {
                 COLUMN_PRODUCT_ID,
                 COLUMN_PRDUCT_NAME,
+                COLUMN_PRDUCT_IMAGE,
                 COLUMN_PRODUCT_EXPIRY
         };
         // sorting orders
@@ -165,10 +168,15 @@ public class DBHandler extends SQLiteOpenHelper {
         // Traversing through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                Product product = new Product();
-                product.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(COLUMN_PRODUCT_ID))));
-                product.setProductName(cursor.getString(cursor.getColumnIndex(COLUMN_PRDUCT_NAME)));
-                product.setExpiryDate(cursor.getString(cursor.getColumnIndex(COLUMN_PRODUCT_EXPIRY)));
+                //product.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(COLUMN_PRODUCT_ID))));
+                //product.setProductName(cursor.getString(cursor.getColumnIndex(COLUMN_PRDUCT_NAME)));
+                //product.setImgByte(cursor.getBlob(cursor.getColumnIndex(COLUMN_PRDUCT_IMAGE)));
+              //  product.setExpiryDate(cursor.getString(cursor.getColumnIndex(COLUMN_PRODUCT_EXPIRY)));
+
+                String name = cursor.getString(1);
+                byte[] imageByte = cursor.getBlob(2);
+                String desp = cursor.getString(3);
+                Product product = new Product(name,desp,imageByte);
                 // Adding user record to list
                 userList.add(product);
             } while (cursor.moveToNext());

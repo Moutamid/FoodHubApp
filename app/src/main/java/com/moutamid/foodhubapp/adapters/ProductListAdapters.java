@@ -1,9 +1,12 @@
 package com.moutamid.foodhubapp.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -36,6 +39,8 @@ public class ProductListAdapters extends RecyclerView.Adapter<ProductListAdapter
         Product product = productList.get(position);
         holder.prductTxt.setText(product.getProductName());
         holder.dateTxt.setText(product.getExpiryDate());
+        Bitmap bitmap = BitmapFactory.decodeByteArray(product.getImgByte(),0,product.getImgByte().length);
+        holder.imageView.setImageBitmap(bitmap);
     }
 
     @Override
@@ -46,9 +51,11 @@ public class ProductListAdapters extends RecyclerView.Adapter<ProductListAdapter
     public class ProductListView extends RecyclerView.ViewHolder{
 
         public TextView prductTxt,dateTxt;
+        private ImageView imageView;
 
         public ProductListView(@NonNull View itemView) {
             super(itemView);
+            imageView = itemView.findViewById(R.id.imageView);
             prductTxt = itemView.findViewById(R.id.productName);
             dateTxt = itemView.findViewById(R.id.expiryDate);
         }

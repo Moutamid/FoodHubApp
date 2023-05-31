@@ -1,27 +1,63 @@
 package com.moutamid.foodhubapp.model;
 
-public class Ingredients {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+import java.util.List;
+
+public class Ingredients implements Parcelable {
 
     private String name;
-    private String link;
-    private double quantity;
+    private List<String> ingredients;
+    private String recipe;
+    private int image;
 
     public Ingredients(){
 
     }
 
-    public Ingredients(String name, String link,double quantity) {
+    public Ingredients(String name, List<String> ingredients, int image,String recipe) {
         this.name = name;
-        this.link = link;
-        this.quantity = quantity;
+        this.ingredients = ingredients;
+        this.image = image;
+        this.recipe = recipe;
     }
 
-    public double getQuantity() {
-        return quantity;
+    protected Ingredients(Parcel in) {
+        name = in.readString();
+        ingredients = in.createStringArrayList();
+        recipe = in.readString();
+        image = in.readInt();
     }
 
-    public void setQuantity(double quantity) {
-        this.quantity = quantity;
+    public static final Creator<Ingredients> CREATOR = new Creator<Ingredients>() {
+        @Override
+        public Ingredients createFromParcel(Parcel in) {
+            return new Ingredients(in);
+        }
+
+        @Override
+        public Ingredients[] newArray(int size) {
+            return new Ingredients[size];
+        }
+    };
+
+    public List<String> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<String> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public String getRecipe() {
+        return recipe;
+    }
+
+    public void setRecipe(String recipe) {
+        this.recipe = recipe;
     }
 
     public String getName() {
@@ -31,12 +67,24 @@ public class Ingredients {
     public void setName(String name) {
         this.name = name;
     }
-
-    public String getLink() {
-        return link;
+    public int getImage() {
+        return image;
     }
 
-    public void setLink(String link) {
-        this.link = link;
+    public void setImage(int image) {
+        this.image = image;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeStringList(ingredients);
+        dest.writeString(recipe);
+        dest.writeInt(image);
     }
 }
