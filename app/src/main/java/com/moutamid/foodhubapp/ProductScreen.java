@@ -161,9 +161,11 @@ public class ProductScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
              //   prodName = productName.getText().toString();
-                Product model = new Product(product,exDate,imageByte);
-                dbHandler.addProduct(model);
-                getProductList();
+                if (!product.equals("") && !exDate.equals("") && imageByte != null) {
+                    Product model = new Product(product, exDate, imageByte);
+                    dbHandler.addProduct(model);
+                    getProductList();
+                }
 
                 alertDialog.dismiss();
             }
