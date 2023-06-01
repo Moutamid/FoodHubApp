@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="@color/white">
+    android:background="@color/purple_500">
 
 
     <LinearLayout
@@ -53,6 +53,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:scrollbars="none"
+        android:background="@drawable/background_recatngle"
         android:orientation="vertical">
 
             <com.google.android.gms.ads.AdView
@@ -75,7 +76,7 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="100dp"
                 android:id="@+id/product"
                 app:cardBackgroundColor="#ffffff"
                 android:layout_marginTop="20dp"
@@ -88,13 +89,16 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center"
-                    android:padding="10dp">
+                    android:background="@drawable/products"
+                    android:padding="10dp"
+                    android:alpha="0.8">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="20sp"
                         android:text="Prodotti"
+                        android:textStyle="bold"
                         android:textColor="@color/black"/>
 
                     <View
@@ -112,7 +116,7 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="100dp"
                 android:id="@+id/ingredient"
                 app:cardBackgroundColor="#ffffff"
                 android:layout_marginTop="15dp"
@@ -125,14 +129,17 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center"
-                    android:padding="10dp">
+                    android:background="@drawable/personal_recipe"
+                    android:padding="10dp"
+                    android:alpha="0.8">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="20sp"
-                        android:text="Ingredienti"
-                        android:textColor="@color/black"/>
+                        android:text="Ricette"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"/>
 
                     <View
                         android:layout_width="0dp"
@@ -149,7 +156,7 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="100dp"
                 app:cardBackgroundColor="#ffffff"
                 android:layout_marginTop="15dp"
                 android:id="@+id/recipe"
@@ -163,12 +170,15 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center"
+                    android:background="@drawable/recipes"
+                    android:alpha="0.8"
                     android:padding="10dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="20sp"
+                        android:textStyle="bold"
                         android:text="Personal Ricette"
                         android:textColor="@color/black"/>
 

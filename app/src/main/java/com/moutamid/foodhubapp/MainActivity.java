@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         manager = new SharedPreferencesManager(MainActivity.this);
         version = manager.retrieveString("billing","Free Version");
         email = manager.retrieveString("email","");
-        bp = BillingProcessor.newBillingProcessor(this, LICENSE_KEY, this);
+        bp = BillingProcessor.newBillingProcessor(MainActivity.this, LICENSE_KEY, this);
         bp.initialize();
 
         checkPermission();

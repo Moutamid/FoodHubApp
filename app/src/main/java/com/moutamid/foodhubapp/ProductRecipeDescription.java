@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 
+import com.moutamid.foodhubapp.adapters.IngredientWithRecipeListAdapters;
 import com.moutamid.foodhubapp.databinding.ActivityProductRecipeDescriptionBinding;
 import com.moutamid.foodhubapp.model.Ingredients;
 
@@ -30,8 +31,8 @@ public class ProductRecipeDescription extends AppCompatActivity {
         binding.imageView.setImageResource(model.getImage());
         binding.recipe.setText(model.getRecipe());
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(ProductRecipeDescription.this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,model.getIngredients());
-        binding.listView.setAdapter(adapter);
+        IngredientWithRecipeListAdapters adapters = new IngredientWithRecipeListAdapters(ProductRecipeDescription.this,model.getIngredients());
+        binding.listView.setAdapter(adapters);
 
     }
 }
