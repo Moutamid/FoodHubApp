@@ -126,10 +126,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "Google InApp Billing is not working now, It will work when app is live on Google Play Store.", Toast.LENGTH_SHORT).show();
                 manager.storeString("billing","Paid Version");
                 startActivity(new Intent(MainActivity.this,PersonalRecipes.class));
                 finish();
-                //    bp.subscribe(PersonalRecipes.this,ONE_TIME_PRODUCT);
+                //bp.subscribe(MainActivity.this,ONE_TIME_PRODUCT);
                 alertDialog.dismiss();
             }
         });
@@ -216,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     @Override
     public void onBillingInitialized() {
-
+     //   Toast.makeText(MainActivity.this, "Billing Initialization "  , Toast.LENGTH_SHORT).show();
     }
 
     @Override
