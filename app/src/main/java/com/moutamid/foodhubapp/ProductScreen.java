@@ -169,7 +169,7 @@ public class ProductScreen extends AppCompatActivity {
             public void onClick(View view) {
              //   prodName = productName.getText().toString();
                 if (!product.equals("") && !exDate.equals("") && imageByte != null) {
-                    Product model = new Product(product,mon, exDate, imageByte);
+                    Product model = new Product(product, exDate, imageByte);
                     dbHandler.addProduct(model);
                     getProductList();
                 }

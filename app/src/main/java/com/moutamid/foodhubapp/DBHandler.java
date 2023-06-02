@@ -40,7 +40,6 @@ public class DBHandler extends SQLiteOpenHelper {
     // User Table Columns names
     private static final String COLUMN_PRODUCT_ID = "product_id";
     private static final String COLUMN_PRDUCT_NAME = "product_name";
-    private static final String COLUMN_PRDUCT_MONTH = "expiry_month";
     private static final String COLUMN_PRDUCT_IMAGE = "product_image";
     private static final String COLUMN_PRODUCT_EXPIRY = "product_expiry";
 
@@ -62,7 +61,6 @@ public class DBHandler extends SQLiteOpenHelper {
 
     private String CREATE_PRODUCT_TABLE = "CREATE TABLE " + TABLE_PRODUCT + "("
             + COLUMN_PRODUCT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_PRDUCT_NAME + " TEXT,"
-            + COLUMN_PRDUCT_MONTH + " INTEGER,"
             + COLUMN_PRDUCT_IMAGE + " BLOB," + COLUMN_PRODUCT_EXPIRY + " DATE" + ")";
     // drop table sql query
     private String DROP_PRODUCT_TABLE = "DROP TABLE IF EXISTS " + TABLE_PRODUCT;
@@ -118,7 +116,6 @@ public class DBHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(COLUMN_PRDUCT_NAME, product.getProductName());
         values.put(COLUMN_PRDUCT_IMAGE, product.getImgByte());
-        values.put(COLUMN_PRDUCT_MONTH, product.getMonth());
         values.put(COLUMN_PRODUCT_EXPIRY, product.getExpiryDate());
         // Inserting Row
         db.insert(TABLE_PRODUCT, null, values);
@@ -147,13 +144,10 @@ public class DBHandler extends SQLiteOpenHelper {
         String[] columns = {
                 COLUMN_PRODUCT_ID,
                 COLUMN_PRDUCT_NAME,
-                COLUMN_PRDUCT_MONTH,
                 COLUMN_PRDUCT_IMAGE,
                 COLUMN_PRODUCT_EXPIRY
         };
-        // sorting orders
-        String sortOrder =
-                COLUMN_PRDUCT_MONTH + " ASC";
+
         List<Product> userList = new ArrayList<Product>();
         SQLiteDatabase db = this.getReadableDatabase();
         // query the user table
@@ -178,10 +172,9 @@ public class DBHandler extends SQLiteOpenHelper {
               //  product.setExpiryDate(cursor.getString(cursor.getColumnIndex(COLUMN_PRODUCT_EXPIRY)));
 
                 String name = cursor.getString(1);
-                int month = cursor.getInt(2);
-                byte[] imageByte = cursor.getBlob(3);
-                String desp = cursor.getString(4);
-                Product product = new Product(name,month,desp,imageByte);
+                byte[] imageByte = cursor.getBlob(2);
+                String desp = cursor.getString(3);
+                Product product = new Product(name,desp,imageByte);
                 // Adding user record to list
                 userList.add(product);
             } while (cursor.moveToNext());
