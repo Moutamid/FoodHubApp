@@ -11,6 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -38,6 +39,7 @@ public class IngredientsScreen extends AppCompatActivity {
     private SharedPreferencesManager manager;
     private String version = "Free Version";
     private DBHandler handler;
+    ArrayList<Ingredients> recipeArrayList = new ArrayList<>();
     private SelectedProductListAdapter adapter;
     private ArrayList<Ingredients> ingredientsArrayList;
     List<String> ingr1 = new ArrayList<>();
@@ -78,6 +80,8 @@ public class IngredientsScreen extends AppCompatActivity {
     List<String> ingr36 = new ArrayList<>();
     List<String> ingr37 = new ArrayList<>();
 
+    ArrayList<String> prodList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,6 +114,7 @@ public class IngredientsScreen extends AppCompatActivity {
         }
 
         loadRecipes();
+
 
         binding.select.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -780,7 +785,7 @@ public class IngredientsScreen extends AppCompatActivity {
 
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) EditText searchBar = (EditText) dialogView.findViewById(R.id.searchTxt);
         listView = (ListView)dialogView.findViewById(R.id.listView);
-
+        Button submitBtn = (Button) dialogView.findViewById(R.id.done);
         AlertDialog alertDialog = dialogBuilder.create();
 
         loadData(alertDialog);
@@ -805,32 +810,31 @@ public class IngredientsScreen extends AppCompatActivity {
             }
         });
 
+        submitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showList();
+                alertDialog.dismiss();
+            }
+        });
+
 
 
         alertDialog.show();
 
     }
 
-    ArrayList<Ingredients> recipeArrayList = new ArrayList<>();
+
     private void loadData(AlertDialog alertDialog) {
         productArrayList = handler.getAllProducts();
+        prodList.clear();
         adapter = new SelectedProductListAdapter(IngredientsScreen.this,productArrayList);
         listView.setAdapter(adapter);
         adapter.setItemClickListener(new ItemClickListener() {
             @Override
             public void onItemClick(int position, View view) {
                 Product products = productArrayList.get(position);
-                recipeArrayList.clear();
-                for (int i = 0;i < ingredientsArrayList.size();i++){
-                    for (String model : ingredientsArrayList.get(i).getIngredients()) {
-                        if (model.contains(products.getProductName())) {
-
-                            recipeArrayList.add(ingredientsArrayList.get(i));
-                            showList();
-                            alertDialog.dismiss();
-                        }
-                    }
-                }
+                prodList.add(products.getProductName());
 
             //    Toast.makeText(IngredientsScreen.this, products.getProductName(), Toast.LENGTH_SHORT).show();
             }
@@ -839,6 +843,17 @@ public class IngredientsScreen extends AppCompatActivity {
     }
 
     private void showList() {
+        recipeArrayList.clear();
+        for (int i = 0;i < ingredientsArrayList.size();i++){
+            for (int j = 0; j < prodList.size(); j++){
+                String productModel = prodList.get(j);
+                for (String model : ingredientsArrayList.get(i).getIngredients()){
+                    if (model.contains(productModel)){
+                        recipeArrayList.add(ingredientsArrayList.get(i));
+                    }
+                }
+            }
+        }
 
         IngredientListAdapters ingredientListAdapters = new IngredientListAdapters(IngredientsScreen.this,recipeArrayList);
         binding.recyclerview.setAdapter(ingredientListAdapters);

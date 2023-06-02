@@ -1,5 +1,6 @@
 package com.moutamid.foodhubapp.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,14 +9,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.moutamid.foodhubapp.DBHandler;
 import com.moutamid.foodhubapp.R;
 import com.moutamid.foodhubapp.model.Product;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ProductListAdapters extends RecyclerView.Adapter<ProductListAdapters.ProductListView>{
 
@@ -35,12 +42,23 @@ public class ProductListAdapters extends RecyclerView.Adapter<ProductListAdapter
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ProductListView holder, int position) {
+    public void onBindViewHolder(@NonNull ProductListView holder, @SuppressLint("RecyclerView") int position) {
         Product product = productList.get(position);
         holder.prductTxt.setText(product.getProductName());
         holder.dateTxt.setText(product.getExpiryDate());
+
         Bitmap bitmap = BitmapFactory.decodeByteArray(product.getImgByte(),0,product.getImgByte().length);
         holder.imageView.setImageBitmap(bitmap);
+        DBHandler dbHandler = new DBHandler(mContext);
+        holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dbHandler.deleteProduct(product);
+                productList.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeRemoved(position,productList.size());
+            }
+        });
     }
 
     @Override
@@ -51,13 +69,14 @@ public class ProductListAdapters extends RecyclerView.Adapter<ProductListAdapter
     public class ProductListView extends RecyclerView.ViewHolder{
 
         public TextView prductTxt,dateTxt;
-        private ImageView imageView;
+        private ImageView imageView,deleteBtn;
 
         public ProductListView(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imageView);
             prductTxt = itemView.findViewById(R.id.productName);
             dateTxt = itemView.findViewById(R.id.expiryDate);
+            deleteBtn =  itemView.findViewById(R.id.delete);
         }
     }
 }

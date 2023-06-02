@@ -1,21 +1,22 @@
 package com.moutamid.foodhubapp;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -31,9 +32,14 @@ import com.moutamid.foodhubapp.databinding.ActivityProductScreenBinding;
 import com.moutamid.foodhubapp.model.Product;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ProductScreen extends AppCompatActivity {
 
@@ -42,6 +48,10 @@ public class ProductScreen extends AppCompatActivity {
     private List<Product> productArrayList;
     private ProductListAdapters adapters;
     private SharedPreferencesManager manager;
+    String product = "";
+    String exDate = "";
+    int pos = 0;
+    byte[] imageByte;
     private String version = "Free Version";
     private String[] prodName = {"Arachidi","Avocado","Banana","Burro","Caffè","Carne di manzo","Carne di maiale",
     "Cioccolato","Formaggio","Gelato","Latte","Insalata","Noci","Olive","Yogurt", "Zucchine","Mele","Mandorle","Melanzane",
@@ -99,10 +109,7 @@ public class ProductScreen extends AppCompatActivity {
         getProductList();
     }
 
-    String product = "";
-    String exDate = "";
-    int pos = 0;
-    byte[] imageByte;
+    int mon = 0;
     private void showAddNewProductDialog() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(ProductScreen.this);
         LayoutInflater inflater = getLayoutInflater();
@@ -148,7 +155,7 @@ public class ProductScreen extends AppCompatActivity {
                 DatePickerDialog datePicker = new DatePickerDialog(ProductScreen.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        int mon= monthOfYear+1;
+                        mon= monthOfYear+1;
                         exDate = dayOfMonth+"/"+mon+"/"+year;
                         expiryTxt.setText(exDate);
                     }
@@ -162,7 +169,7 @@ public class ProductScreen extends AppCompatActivity {
             public void onClick(View view) {
              //   prodName = productName.getText().toString();
                 if (!product.equals("") && !exDate.equals("") && imageByte != null) {
-                    Product model = new Product(product, exDate, imageByte);
+                    Product model = new Product(product,mon, exDate, imageByte);
                     dbHandler.addProduct(model);
                     getProductList();
                 }
@@ -176,6 +183,31 @@ public class ProductScreen extends AppCompatActivity {
 
     private void getProductList() {
         productArrayList = dbHandler.getAllProducts();
+        Collections.sort(productArrayList, new Comparator<Product>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public int compare(Product o1, Product o2) {
+                @SuppressLint({"NewApi", "LocalSuppress"}) SimpleDateFormat sdf =
+                        new SimpleDateFormat("dd/MM/yyyy",Locale.ENGLISH);
+                Date d1=null;
+                Date d2= null;
+
+                try {
+                    d1=sdf.parse(o1.getExpiryDate());
+
+                    d2= sdf.parse(o2.getExpiryDate());
+
+                } catch (ParseException e) {
+
+                    e.printStackTrace();
+                }
+
+                //String time1 = sdf.format(d1.getTime());
+                //String time2 = sdf.format(d2.getTime());
+
+                return d1.compareTo(d2);
+            }
+        });
         adapters = new ProductListAdapters(ProductScreen.this,productArrayList);
         binding.recyclerview.setAdapter(adapters);
         adapters.notifyDataSetChanged();
