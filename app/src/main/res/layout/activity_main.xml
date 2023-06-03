@@ -179,7 +179,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="20sp"
                         android:textStyle="bold"
-                        android:text="Personal Ricette"
+                        android:text="Ricette Personali"
                         android:textColor="@color/black"/>
 
                     <View
